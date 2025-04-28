@@ -32,3 +32,15 @@ router.put('/:id', apiKeyAuth, async (req, res) => {
         res.status(400).json({ error: 'Failed to update product' });
     }
 });
+
+// delete a product
+router.delete('/:id', apiKeyAuth, async (req, res) => {
+    try {
+        await Product.findByIdandDekete(req.params.id)
+        res.json({ message: 'Product deleted successfully' });
+    } catch (error) {
+        res.status(400).json({ error: 'Failed to delete product' });
+    }
+});
+
+module.exports = router;

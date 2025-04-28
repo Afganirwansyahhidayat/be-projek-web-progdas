@@ -1,8 +1,12 @@
 const express = require('express')
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+const cors = require('cors')
+const productRoutes = require('./routes/productRoutes')
+
+// connect to MongoDB
+dotenv.config()
+
 const app = express()
 
-
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-app.listen(3000, () => console.log('server running on port 3000!'))
+app.use(cors())
