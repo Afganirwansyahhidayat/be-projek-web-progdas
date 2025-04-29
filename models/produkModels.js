@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema({
+const productSchema = new mongoose.Schema({
     title: String,
     brand: String,
     category: String,
@@ -13,4 +13,4 @@ const Schema = mongoose.Schema({
     colorway: String
 });
 
-module.exports = mongoose.model('Product', Schema);             
+module.exports = mongoose.model('Product', productSchema);             

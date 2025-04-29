@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Product = require('../models/produkModels') 
+const Product = require('../models/produkModels')
 const apiKeyAuth = require('../middleware/apiKeyAuth');
 
 // create a new product
@@ -16,30 +16,33 @@ router.post('/', apiKeyAuth, async (req, res) => {
 // read all product
 router.get('/', async (req, res) => {
     try {
-        const products = await Product.find();
-        res.json(products);
+        const readProducts = await Product.find();
+        res.json(readProducts);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch products' });
     }
 })
 
 // update a product
-router.put('/:id', apiKeyAuth, async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        const updateProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(updateProduct);
-    } catch (error) {
-        res.status(400).json({ error: 'Failed to update product' });
+        const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updated) return res.status(404).json({ error: 'Product not found' });
+        res.json(updated);
+    } catch (err) {
+        res.status(400).json({ error: 'Update failed', detail: err.message });
     }
 });
 
+
 // delete a product
-router.delete('/:id', apiKeyAuth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
-        await Product.findByIdandDekete(req.params.id)
-        res.json({ message: 'Product deleted successfully' });
-    } catch (error) {
-        res.status(400).json({ error: 'Failed to delete product' });
+        const deleted = await Product.findByIdAndDelete(req.params.id);
+        if (!deleted) return res.status(404).json({ error: 'Product not found' });
+        res.json({ message: 'Product deleted' });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to delete product' });
     }
 });
 
