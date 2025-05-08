@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/userModels');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 
 // register
 router.post('/register', async (req, res) => {
@@ -72,9 +73,9 @@ router.delete('/:id', async (req, res) => {
 });
 
 // get all users
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
-        const users = await User.find().select('-password'); // hide password
+        const users = await User.find().select('-password'); 
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: 'Failed to get users', details: error.message });

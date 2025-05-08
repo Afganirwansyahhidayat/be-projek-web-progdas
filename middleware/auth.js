@@ -1,18 +1,12 @@
-const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-const auth = (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (error) {
-        return res.status(400).json({ message: 'Invalid Token' });
-    }
+const apiKeyAuth = (req, res, next) => {
+    const apiKey = req.headers['x-api-key'];
 
+    if (!apiKey || apiKey !== process.env.API_KEY) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    next();
 }
 
-module.exports = auth;
+module.exports = apiKeyAuth;
