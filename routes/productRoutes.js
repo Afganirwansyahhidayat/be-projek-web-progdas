@@ -3,6 +3,14 @@ const router = express.Router();
 const Product = require('../models/produkModels')
 const apiKeyAuth = require('../middleware/apiKeyAuth');
 
+// filter kategori
+router.get('/', async (req, res) => {
+    const { category } = req.query;
+    const filter = category ? { category } : {};
+    const products = await Product.find(filter);
+    res.json(products);
+  })
+
 // create a new product
 router.post('/', apiKeyAuth, async (req, res) => {
     try {
